@@ -7,12 +7,10 @@ const year = document.getElementById("year");
 const loading = document.getElementById("loading");
 const fireworks = document.getElementById("fireworks");
 
-// Отримуємо поточну дату
 const currentDate = new Date();
-// Створюємо дату для відліку (3 число наступного місяця о 18:00)
 const targetDate = new Date(currentDate);
-targetDate.setMonth(currentDate.getMonth() + 1, 3); // наступний місяць, 3 число
-targetDate.setHours(18, 0, 0, 0); // 18:00:00
+targetDate.setMonth(currentDate.getMonth() + 1, 3); 
+targetDate.setHours(18, 0, 0, 0); 
 
 function updateCountdown() {
     const currentTime = new Date();
@@ -39,7 +37,6 @@ function updateCountdown() {
         currentSeconds < 10 ? "0" + currentSeconds : currentSeconds;
 }
 
-// Показуємо дату відліку
 const targetDateString = targetDate.toLocaleDateString("uk-UA", {
     day: "numeric",
     month: "long",
@@ -59,8 +56,6 @@ setInterval(updateCountdown, 1000);
 function createFirework() {
     const firework = document.createElement("div");
     firework.className = "firework";
-
-    // Випадкова позиція (залишаємо більше простору по краях)
     const x = Math.random() * (window.innerWidth - 200) + 100;
     const y = Math.random() * (window.innerHeight - 200) + 100;
 
@@ -75,13 +70,12 @@ function createFirework() {
     ];
     const color = colors[Math.floor(Math.random() * colors.length)];
 
-    // Створюємо більше трейлів
     for (let i = 0; i < 230; i++) {
         const trail = document.createElement("div");
         trail.className = "trail";
         trail.style.backgroundColor = color;
 
-        // Випадкове розташування трейлів
+  
         const angle = i * 12 * (Math.PI / 180);
         const distance = Math.random() * 150 + 50;
 
@@ -97,11 +91,11 @@ function createFirework() {
 
     fireworks.appendChild(firework);
 
-    // Видаляємо салют після анімації
+
     setTimeout(() => {
         firework.remove();
     }, 2000);
 }
 
-// Запускаємо салют кожну секунду
+
 setInterval(createFirework, 300);

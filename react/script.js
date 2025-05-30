@@ -49,63 +49,41 @@ setTimeout(() => {
     loading.remove();
     countdown.style.display = "flex";
 }, 1000);
-
 setInterval(updateCountdown, 1000);
-
-// Функція для створення GIF
 function createGif() {
     const gif = document.createElement("img");
-
-    // Випадковий вибір GIF (від gif2 до gif5)
-    const gifNumber = Math.floor(Math.random() * 4) + 2; // випадкове число від 2 до 5
+    const gifNumber = Math.floor(Math.random() * 4) + 2;
     gif.src = `./img/gif${gifNumber}.gif`;
     gif.className = "random-gif";
-
-    // Випадкове розташування
     const x = Math.random() * (window.innerWidth - 200);
     const y = Math.random() * (window.innerHeight - 200);
-
-    // Випадковий розмір (від 100 до 200 пікселів)
     const size = Math.random() * 100 + 100;
-
     gif.style.position = "absolute";
     gif.style.left = `${x}px`;
     gif.style.top = `${y}px`;
     gif.style.width = `${size}px`;
     gif.style.height = `${size}px`;
     gif.style.zIndex = "0";
-
-    // Додаємо GIF до body
     document.body.appendChild(gif);
-
-    // Видаляємо після рандомного часу (від 2 до 5 секунд)
     const disappearDelay = Math.random() * 3000 + 2000;
     setTimeout(() => {
         gif.style.opacity = "0";
-        // Видаляємо після анімації зникнення
         setTimeout(() => {
             gif.remove();
         }, 500);
     }, disappearDelay);
 }
 
-// Створюємо GIF рандомно (від 1 до 3 секунд)
 let lastGifTime = 0;
 function createRandomGif() {
     const currentTime = new Date().getTime();
     if (currentTime - lastGifTime > 2000) {
-        // мінімальний інтервал 1 секунда
         createGif();
         lastGifTime = currentTime;
     }
 }
-
-// Викликаємо функцію кожні 200 мс
 setInterval(createRandomGif, 200);
-
-// Додаємо обробник розміру вікна
 window.addEventListener("resize", () => {
-    // При зміні розміру вікна видаляємо всі GIF
     const gifs = document.querySelectorAll(".random-gif");
     gifs.forEach((gif) => gif.remove());
 });

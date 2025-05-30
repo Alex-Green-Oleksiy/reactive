@@ -5,12 +5,11 @@ const seconds = document.getElementById("seconds");
 const countdown = document.getElementById("countdown");
 const year = document.getElementById("year");
 const loading = document.getElementById("loading");
-const fireworks = document.getElementById("fireworks");
 
 const currentDate = new Date();
 const targetDate = new Date(currentDate);
-targetDate.setMonth(currentDate.getMonth() + 1, 3); 
-targetDate.setHours(18, 0, 0, 0); 
+targetDate.setMonth(currentDate.getMonth() + 1, 3);
+targetDate.setHours(18, 0, 0, 0);
 
 function updateCountdown() {
     const currentTime = new Date();
@@ -53,49 +52,60 @@ setTimeout(() => {
 
 setInterval(updateCountdown, 1000);
 
-function createFirework() {
-    const firework = document.createElement("div");
-    firework.className = "firework";
-    const x = Math.random() * (window.innerWidth - 200) + 100;
-    const y = Math.random() * (window.innerHeight - 200) + 100;
+// Функція для створення GIF
+function createGif() {
+    const gif = document.createElement("img");
 
-    // Випадкові кольори для салюту
-    const colors = [
-        "#FF0000",
-        "#00FF00",
-        "#0000FF",
-        "#FFFF00",
-        "#FF00FF",
-        "#00FFFF"
-    ];
-    const color = colors[Math.floor(Math.random() * colors.length)];
+    // Випадковий вибір GIF (від gif2 до gif5)
+    const gifNumber = Math.floor(Math.random() * 4) + 2; // випадкове число від 2 до 5
+    gif.src = `./img/gif${gifNumber}.gif`;
+    gif.className = "random-gif";
 
-    for (let i = 0; i < 230; i++) {
-        const trail = document.createElement("div");
-        trail.className = "trail";
-        trail.style.backgroundColor = color;
+    // Випадкове розташування
+    const x = Math.random() * (window.innerWidth - 200);
+    const y = Math.random() * (window.innerHeight - 200);
 
-  
-        const angle = i * 12 * (Math.PI / 180);
-        const distance = Math.random() * 150 + 50;
+    // Випадковий розмір (від 100 до 200 пікселів)
+    const size = Math.random() * 100 + 100;
 
-        const dx = Math.cos(angle) * distance;
-        const dy = Math.sin(angle) * distance;
+    gif.style.position = "absolute";
+    gif.style.left = `${x}px`;
+    gif.style.top = `${y}px`;
+    gif.style.width = `${size}px`;
+    gif.style.height = `${size}px`;
+    gif.style.zIndex = "0";
 
-        trail.style.transform = `translate(${dx}px, ${dy}px)`;
-        firework.appendChild(trail);
-    }
+    // Додаємо GIF до body
+    document.body.appendChild(gif);
 
-    firework.style.left = `${x}px`;
-    firework.style.top = `${y}px`;
-
-    fireworks.appendChild(firework);
-
-
+    // Видаляємо після рандомного часу (від 2 до 5 секунд)
+    const disappearDelay = Math.random() * 3000 + 2000;
     setTimeout(() => {
-        firework.remove();
-    }, 2000);
+        gif.style.opacity = "0";
+        // Видаляємо після анімації зникнення
+        setTimeout(() => {
+            gif.remove();
+        }, 500);
+    }, disappearDelay);
 }
 
+// Створюємо GIF рандомно (від 1 до 3 секунд)
+let lastGifTime = 0;
+function createRandomGif() {
+    const currentTime = new Date().getTime();
+    if (currentTime - lastGifTime > 2000) {
+        // мінімальний інтервал 1 секунда
+        createGif();
+        lastGifTime = currentTime;
+    }
+}
 
-setInterval(createFirework, 300);
+// Викликаємо функцію кожні 200 мс
+setInterval(createRandomGif, 200);
+
+// Додаємо обробник розміру вікна
+window.addEventListener("resize", () => {
+    // При зміні розміру вікна видаляємо всі GIF
+    const gifs = document.querySelectorAll(".random-gif");
+    gifs.forEach((gif) => gif.remove());
+});
